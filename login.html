@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido - Gestiona Fácil</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg-color: #ffffff;
+            --text-color: #333333;
+            --text-muted-color: #666666;
+            --primary-color: #007bff;
+            --primary-hover-color: #0056b3;
+            --danger-color: #dc3545;
+            --input-bg-color: #ffffff;
+            --input-border-color: #ced4da;
+            --input-focus-border-color: #80bdff;
+            --border-color: #e0e0e0;
+            --border-radius-lg: 20px; /* Very rounded */
+            --border-radius-md: 10px;
+            --box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            color: var(--text-color);
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+
+        /* Simple fade-in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-container {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: 35px 40px;
+            width: 100%;
+            max-width: 450px; /* Limit width for login form */
+            box-shadow: var(--box-shadow);
+            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+            animation: fadeIn 0.5s ease-out;
+            text-align: center; /* Center header text */
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        header p {
+            color: var(--text-muted-color);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .form-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left; /* Align labels left */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-muted-color);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted-color);
+            transition: color var(--transition-speed) ease;
+            font-size: 0.95em; /* Adjust icon size */
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 12px 15px 12px 40px; /* Adjust padding for icon */
+            box-sizing: border-box;
+            border: 1px solid var(--input-border-color);
+            border-radius: var(--border-radius-md); /* Rounded inputs */
+            background-color: var(--input-bg-color);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            border-color: var(--input-focus-border-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+        }
+         input[type="text"]:focus + i,
+         input[type="password"]:focus + i {
+             color: var(--primary-color);
+         }
+
+
+        /* Select styling */
+        select {
+            appearance: none; /* Remove default arrow */
+            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%23666" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 12px 12px;
+            padding-right: 40px; /* Space for custom arrow */
+        }
+
+        /* Button styling */
+        button[type="submit"] {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1.05em;
+            font-weight: 500;
+            cursor: pointer;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-md); /* Rounded button */
+            margin-top: 10px; /* Space above button */
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--primary-hover-color);
+            transform: translateY(-2px);
+        }
+        button[type="submit"]:disabled {
+             background-color: #cccccc;
+             cursor: not-allowed;
+             transform: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .error {
+            color: var(--danger-color);
+            font-size: 0.85em;
+            margin-top: 10px;
+            text-align: center;
+            background-color: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.2);
+            padding: 8px;
+            border-radius: var(--border-radius-md);
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: var(--text-muted-color);
+        }
+
+         /* Dark Theme Styles */
+        body.dark-theme {
+            --bg-color: #1a1a1a;
+            --card-bg-color: #2c2c2c;
+            --text-color: #e0e0e0;
+            --text-muted-color: #a0a0a0;
+            --primary-color: #3498db;
+            --primary-hover-color: #5dade2;
+            --danger-color: #e74c3c;
+            --input-bg-color: #383838;
+            --input-border-color: #555555;
+            --input-focus-border-color: #3498db;
+            --border-color: #444444;
+
+             /* Update select arrow color for dark theme */
+            select {
+                 background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%23aaa" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');
+            }
+             button[type="submit"]:disabled {
+                 background-color: #555;
+             }
+        }
+
+         /* Theme Toggle Button */
+         .theme-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            color: var(--text-color);
+            font-size: 1.2em;
+            transition: all var(--transition-speed) ease;
+         }
+         .theme-toggle:hover {
+            transform: scale(1.1);
+         }
+
+    </style>
+</head>
+<body class=""> <!-- Theme class added by JS -->
+
+     <!-- Theme toggle button -->
+    <button id="theme-toggle-button" class="theme-toggle" title="Cambiar Tema">
+        <i class="fas fa-sun"></i> <!-- Default to light icon -->
+    </button>
+
+    <div class="login-container">
+        <header>
+            <h1>Gestiona Fácil</h1>
+            <p>Tu ayudante simple para ventas y negocio.</p>
+        </header>
+
+        <main>
+            <!-- Sección de Login (si ya existe negocio) -->
+            <section id="login-form" class="form-section hidden">
+                <h2>Ingresar a tu Negocio</h2>
+                <form id="do-login">
+                    <div class="form-group">
+                        <label for="login-password">Contraseña Maestra:</label>
+                        <div class="input-group">
+                           <input type="password" id="login-password" required autocomplete="current-password">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                    </div>
+                    <p id="login-error" class="error hidden"></p> <!-- Mensaje de error -->
+                    <button type="submit" id="login-button">Ingresar</button>
+                </form>
+            </section>
+
+            <!-- Sección de Configuración Inicial (si NO existe negocio) -->
+            <section id="setup-form" class="form-section hidden">
+                <h2>¡Bienvenido! Configura tu Negocio</h2>
+                <p style="text-align: left; font-size: 0.9em; color: var(--text-muted-color); margin-bottom: 20px;">Completa estos datos básicos para empezar:</p>
+                <form id="do-setup">
+                    <div class="form-group">
+                        <label for="business-name">Nombre de tu Negocio:</label>
+                         <div class="input-group">
+                            <input type="text" id="business-name" required autocomplete="organization">
+                            <i class="fas fa-store"></i>
+                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="currency">Moneda Principal:</label>
+                         <div class="input-group">
+                            <select id="currency" required>
+                                <option value="$">Dólar ($)</option>
+                                <option value="€">Euro (€)</option>
+                                <option value="Bs.">Bolívares (Bs.)</option>
+                                <option value="COP">Peso Colombiano (COP)</option>
+                                <!-- Agrega otras monedas si es necesario -->
+                            </select>
+                            <!-- Select doesn't typically have an icon inside like this,
+                                 but keeping group for consistency if needed later -->
+                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="setup-password">Crea tu Contraseña Maestra:</label>
+                        <div class="input-group">
+                            <input type="password" id="setup-password" required autocomplete="new-password">
+                            <i class="fas fa-key"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirma la Contraseña:</label>
+                        <div class="input-group">
+                            <input type="password" id="confirm-password" required autocomplete="new-password">
+                             <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                    <p id="setup-error" class="error hidden"></p> <!-- Mensaje de error -->
+                    <button type="submit" id="setup-button">Guardar y Empezar</button>
+                </form>
+            </section>
+        </main>
+
+        <footer>
+            <p><small>© 2024 Gestiona Fácil</small></p>
+        </footer>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const setupForm = document.getElementById('setup-form');
+        const loginError = document.getElementById('login-error');
+        const setupError = document.getElementById('setup-error');
+        const loginButton = document.getElementById('login-button');
+        const setupButton = document.getElementById('setup-button');
+        const themeToggleButton = document.getElementById('theme-toggle-button');
+        const body = document.body;
+        const themeIcon = themeToggleButton.querySelector('i');
+
+        // --- Theme Management ---
+        function setTheme(theme) {
+            if (theme === 'dark') {
+                body.classList.add('dark-theme');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                body.classList.remove('dark-theme');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        themeToggleButton.addEventListener('click', () => {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            setTheme(currentTheme === 'light' ? 'dark' : 'light');
+        });
+
+        // --- Form Logic ---
+        try {
+            const negocioGuardado = localStorage.getItem('businessName'); // Check if setup was done
+            const masterPasswordExists = localStorage.getItem('masterPassword');
+
+            if (negocioGuardado && masterPasswordExists) {
+                loginForm.classList.remove('hidden');
+            } else {
+                // If either name or password is missing, force setup
+                if (negocioGuardado && !masterPasswordExists) {
+                    // Handle edge case: name exists but password doesn't (maybe error during previous setup)
+                    // Optionally clear businessName to force full setup again
+                    // localStorage.removeItem('businessName');
+                    console.warn("Nombre de negocio encontrado pero sin contraseña maestra. Forzando configuración.");
+                }
+                setupForm.classList.remove('hidden');
+            }
+        } catch (e) {
+            console.error("Error accessing localStorage:", e);
+            // Fallback: show setup form if localStorage fails
+            setupForm.classList.remove('hidden');
+            setupForm.insertAdjacentHTML('afterbegin', '<p class="error">Error al acceder al almacenamiento local. Es posible que la aplicación no funcione correctamente.</p>');
+        }
+
+        // --- Event Listeners ---
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            loginError.classList.add('hidden'); // Hide previous errors
+            loginButton.disabled = true; // Prevent double-click
+            loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ingresando...'; // Loading indicator
+
+            const password = document.getElementById('login-password').value;
+
+            // Simulate network delay or processing
+            setTimeout(() => {
+                try {
+                    const storedPassword = localStorage.getItem('masterPassword');
+
+                    if (password === storedPassword) {
+                        // Success
+                        window.location.href = 'dashboard.html';
+                         // No need to re-enable button as we are navigating away
+                    } else {
+                        loginError.textContent = 'Contraseña incorrecta.';
+                        loginError.classList.remove('hidden');
+                        loginButton.disabled = false; // Re-enable button
+                        loginButton.textContent = 'Ingresar';
+                    }
+                } catch(e) {
+                    loginError.textContent = 'Error al verificar la contraseña.';
+                    loginError.classList.remove('hidden');
+                    console.error("Login error:", e);
+                    loginButton.disabled = false; // Re-enable button
+                     loginButton.textContent = 'Ingresar';
+                }
+            }, 300); // Short delay for visual feedback
+        });
+
+        setupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            setupError.classList.add('hidden'); // Hide previous errors
+            setupButton.disabled = true;
+            setupButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+
+            const businessName = document.getElementById('business-name').value.trim();
+            const currency = document.getElementById('currency').value;
+            const password = document.getElementById('setup-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+             // Simulate network delay or processing
+            setTimeout(() => {
+                // Basic Validations
+                if (!businessName) {
+                    setupError.textContent = 'El nombre del negocio es obligatorio.';
+                    setupError.classList.remove('hidden');
+                     setupButton.disabled = false;
+                     setupButton.textContent = 'Guardar y Empezar';
+                    return;
+                }
+                if (password.length < 4) { // Basic length check
+                     setupError.textContent = 'La contraseña debe tener al menos 4 caracteres.';
+                     setupError.classList.remove('hidden');
+                      setupButton.disabled = false;
+                      setupButton.textContent = 'Guardar y Empezar';
+                     return;
+                 }
+                if (password !== confirmPassword) {
+                    setupError.textContent = 'Las contraseñas no coinciden.';
+                    setupError.classList.remove('hidden');
+                     setupButton.disabled = false;
+                     setupButton.textContent = 'Guardar y Empezar';
+                    return;
+                }
+
+                try {
+                    // Save to LocalStorage
+                    localStorage.setItem('businessName', businessName);
+                    localStorage.setItem('currency', currency);
+                    localStorage.setItem('masterPassword', password); // Store password
+                     // Set default business type (can be changed in config)
+                    localStorage.setItem('businessType', 'store');
+                    // Initialize other necessary empty structures
+                    localStorage.setItem('productos', '[]');
+                    localStorage.setItem('proveedores', '[]');
+                    localStorage.setItem('clientes', '[]');
+                    localStorage.setItem('ventas', '[]');
+                    localStorage.setItem('gastos', '[]');
+                    localStorage.setItem('cashRegisterStatus', '{}');
+                    localStorage.setItem('cashHistory', '[]');
+                    localStorage.setItem('restaurantTables', '[]'); // Initialize even if type is store
+
+                    // Redirect
+                    window.location.href = 'dashboard.html';
+                } catch (e) {
+                     setupError.textContent = 'Error al guardar la configuración. Verifica el espacio de almacenamiento.';
+                     setupError.classList.remove('hidden');
+                     console.error("Setup error:", e);
+                      setupButton.disabled = false;
+                      setupButton.textContent = 'Guardar y Empezar';
+                }
+            }, 300); // Short delay
+        });
+
+    </script>
+
+</body>
+</html>

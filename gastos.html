@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gastos y Pagos - Gestiona Fácil</title>
+     <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Reuse common styles */
+        :root {
+            --bg-color: #f0f2f5;
+            --sidebar-bg: #ffffff;
+            --content-bg: #f0f2f5;
+            --card-bg-color: #ffffff;
+            --text-color: #333333;
+            --text-muted-color: #6c757d;
+            --primary-color: #007bff;
+            --primary-hover-color: #0056b3;
+            --secondary-color: #6c757d;
+            --secondary-hover-color: #5a6268;
+            --success-color: #28a745;
+            --success-hover-color: #1e7e34;
+            --danger-color: #dc3545;
+            --danger-hover-color: #c82333;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --link-color: #007bff;
+            --link-active-color: #0056b3;
+            --input-bg-color: #ffffff;
+            --input-border-color: #ced4da;
+            --input-focus-border-color: #80bdff;
+            --border-color: #e9ecef;
+            --border-radius-lg: 16px;
+            --border-radius-md: 8px;
+            --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+             --box-shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.08);
+            --sidebar-width: 240px;
+            --transition-speed: 0.3s;
+        }
+
+        /* Dark Theme Variables */
+        body.dark-theme {
+            --bg-color: #1a1d21;
+            --sidebar-bg: #212529;
+            --content-bg: #1a1d21;
+            --card-bg-color: #2c3034;
+            --text-color: #e9ecef;
+            --text-muted-color: #adb5bd;
+            --primary-color: #3498db;
+            --primary-hover-color: #5dade2;
+            --secondary-color: #adb5bd;
+            --secondary-hover-color: #ced4da;
+            --success-color: #20c997;
+            --success-hover-color: #1aab88;
+            --danger-color: #e74c3c;
+            --danger-hover-color: #ff6b6b;
+            --warning-color: #fdc107;
+            --info-color: #3498db;
+            --link-color: #3498db;
+            --link-active-color: #5dade2;
+            --input-bg-color: #3a3f44;
+            --input-border-color: #555555;
+            --input-focus-border-color: #3498db;
+            --border-color: #3a3f44;
+             /* Update select arrow color */
+            select { background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%23aaa" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>') !important; }
+             .filters { background-color: var(--card-bg-color); }
+              .total-expenses { border-top-color: var(--border-color); }
+        }
+
+         * { box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; margin: 0; background-color: var(--bg-color); color: var(--text-color); transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease; font-size: 15px; }
+
+        /* Sidebar Styles */
+         .sidebar { width: var(--sidebar-width); background-color: var(--sidebar-bg); padding: 20px 15px; height: 100vh; position: fixed; top: 0; left: 0; border-right: 1px solid var(--border-color); box-shadow: 2px 0 5px rgba(0,0,0,0.05); transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease; display: flex; flex-direction: column; overflow-y: auto; }
+         .sidebar h2 { margin-top: 0; margin-bottom: 5px; color: var(--primary-color); font-size: 1.6em; text-align: center; }
+         .sidebar .business-info { text-align: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px dashed var(--border-color); }
+          .sidebar .business-info small { font-size: 0.85em; color: var(--text-muted-color); }
+         .sidebar ul { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
+        .sidebar ul li a { text-decoration: none; color: var(--text-muted-color); display: flex; align-items: center; gap: 10px; padding: 10px 15px; margin-bottom: 5px; border-radius: var(--border-radius-md); transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease; font-weight: 500; }
+        .sidebar ul li a i { width: 18px; text-align: center; font-size: 1.1em; color: var(--text-muted-color); transition: color var(--transition-speed) ease; }
+        .sidebar ul li a:hover { background-color: rgba(0, 123, 255, 0.05); color: var(--link-hover-color); }
+        .sidebar ul li a:hover i { color: var(--link-hover-color); }
+        .sidebar ul li a.active { background-color: var(--primary-color); color: #ffffff; font-weight: 600; }
+         .sidebar ul li a.active i { color: #ffffff; }
+         .sidebar .logout-link { margin-top: auto; padding-top: 15px; border-top: 1px solid var(--border-color); }
+        .sidebar .logout-link a { color: var(--danger-color); }
+         .sidebar .logout-link a i { color: var(--danger-color); }
+        .sidebar .logout-link a:hover { background-color: rgba(220, 53, 69, 0.1); color: var(--danger-color); }
+
+        /* Content Area */
+        .content { flex-grow: 1; padding: 25px 30px; margin-left: var(--sidebar-width); display: flex; flex-direction: column; }
+        .content header { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+         .content header h1 { margin: 0 0 5px 0; font-size: 1.8em; font-weight: 600; }
+         .content header p { margin: 0; color: var(--text-muted-color); }
+
+        /* Expense Form Section */
+        .expense-form { border: 1px solid var(--border-color); padding: 25px 30px; margin-bottom: 30px; background-color: var(--card-bg-color); border-radius: var(--border-radius-lg); box-shadow: var(--box-shadow); }
+        .expense-form h2 { margin-top: 0; margin-bottom: 25px; font-weight: 600; font-size: 1.4em; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .form-group { margin-bottom: 0; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.9rem; color: var(--text-muted-color); }
+        .input-group { position: relative; }
+         .input-group i { position: absolute; left: 15px; top: 14px; transform: translateY(-50%); color: var(--text-muted-color); transition: color var(--transition-speed) ease; font-size: 0.95em; pointer-events: none; }
+         .input-with-suffix { display: flex; align-items: center; }
+         .input-with-suffix input { flex-grow: 1; border-top-right-radius: 0; border-bottom-right-radius: 0; }
+         .input-with-suffix span { padding: 12px; background-color: var(--bg-color); border: 1px solid var(--input-border-color); border-left: none; border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0; font-size: 0.9rem; color: var(--text-muted-color); }
+         body.dark-theme .input-with-suffix span { background-color: var(--input-bg-color); border-color: var(--input-border-color); }
+
+        .form-group input[type="date"], .form-group input[type="number"], .form-group input[type="text"], .form-group select, .form-group textarea { width: 100%; padding: 12px 15px; box-sizing: border-box; border: 1px solid var(--input-border-color); border-radius: var(--border-radius-md); background-color: var(--input-bg-color); color: var(--text-color); font-size: 1rem; transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease; }
+         .form-group .input-group input { padding-left: 40px; }
+        .form-group select { appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%236c757d" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); background-repeat: no-repeat; background-position: right 15px center; background-size: 12px 12px; padding-right: 40px; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--input-focus-border-color); outline: none; box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1); }
+         .form-group .input-group input:focus + i { color: var(--primary-color); }
+         .form-group textarea { padding: 12px 15px; } /* No icon */
+
+        .form-actions { grid-column: 1 / -1; margin-top: 20px; }
+        .form-actions button { padding: 10px 20px; cursor: pointer; border: none; border-radius: var(--border-radius-md); font-weight: 500; transition: all var(--transition-speed) ease; background-color: var(--success-color); color: white; display: inline-flex; align-items: center; gap: 8px; }
+        .form-actions button:hover { background-color: var(--success-hover-color); transform: translateY(-2px); }
+
+        /* Filters Section */
+        .filters { margin-bottom: 15px; display: flex; gap: 15px; flex-wrap: wrap; align-items: center; background-color: rgba(0,0,0,0.02); padding: 15px; border-radius: var(--border-radius-lg); }
+         body.dark-theme .filters { background-color: rgba(255,255,255,0.03); }
+        .filters label { font-weight: 500; color: var(--text-muted-color); font-size: 0.9em; }
+        .filters input, .filters select { padding: 8px 12px; border: 1px solid var(--input-border-color); border-radius: var(--border-radius-md); background-color: var(--input-bg-color); color: var(--text-color); font-size: 0.95em; }
+         .filters select { appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%236c757d" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>'); background-repeat: no-repeat; background-position: right 10px center; background-size: 12px 12px; padding-right: 35px;}
+        .filters button { padding: 8px 15px; cursor: pointer; border: none; border-radius: var(--border-radius-md); font-weight: 500; transition: all var(--transition-speed) ease; display: inline-flex; align-items: center; gap: 6px; font-size: 0.9em; }
+         .filters .filter-button { background-color: var(--primary-color); color: white; }
+         .filters .filter-button:hover { background-color: var(--primary-hover-color); }
+         .filters .reset-button { background-color: var(--secondary-color); color: white; }
+         .filters .reset-button:hover { background-color: var(--secondary-hover-color); }
+
+        /* Table Styles */
+        .table-container { background-color: var(--card-bg-color); border: 1px solid var(--border-color); border-radius: var(--border-radius-lg); overflow: hidden; box-shadow: var(--box-shadow); margin-bottom: 25px; }
+        table { width: 100%; border-collapse: collapse; margin: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; font-size: 0.95em; }
+        th { background-color: rgba(0,0,0,0.02); body.dark-theme & { background-color: rgba(255,255,255,0.03); } font-weight: 600; font-size: 0.85em; color: var(--text-muted-color); text-transform: uppercase; letter-spacing: 0.5px; }
+        tbody tr { transition: background-color var(--transition-speed) ease; }
+        tbody tr:hover { background-color: rgba(0, 123, 255, 0.03); body.dark-theme & { background-color: rgba(52, 152, 219, 0.05); } }
+         tbody tr:last-child td { border-bottom: none; }
+        .actions button { margin: 0; padding: 5px 8px; cursor: pointer; background: none; border: 1px solid transparent; border-radius: var(--border-radius-md); font-size: 0.9em; transition: all var(--transition-speed) ease; color: var(--danger-color); }
+        .actions button:hover { background-color: rgba(220, 53, 69, 0.1); border-color: rgba(220, 53, 69, 0.3); }
+
+        .total-expenses { margin-top: 15px; padding-top: 15px; font-weight: bold; text-align: right; border-top: 1px solid var(--border-color); font-size: 1.1em; }
+        .total-expenses span { color: var(--primary-color); }
+
+        /* Error & Messages */
+        .error { color: var(--danger-color); font-size: 0.85em; margin-top: 10px; background-color: rgba(220, 53, 69, 0.05); border: 1px solid rgba(220, 53, 69, 0.1); padding: 8px 12px; border-radius: var(--border-radius-md); text-align: center; grid-column: 1 / -1; }
+         .error i { margin-right: 5px; }
+        .hidden { display: none; }
+        #no-expenses-message { text-align: center; padding: 20px; color: var(--text-muted-color); background-color: rgba(0,0,0,0.02); body.dark-theme & { background-color: rgba(255,255,255,0.03); } border-radius: var(--border-radius-md); }
+
+         /* Theme Toggle Button */
+         .theme-toggle { position: fixed; top: 15px; right: 15px; background-color: var(--card-bg-color); border: 1px solid var(--border-color); border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); color: var(--text-color); font-size: 1.2em; transition: all var(--transition-speed) ease; z-index: 1000; }
+         .theme-toggle:hover { transform: scale(1.1); }
+
+         /* Responsive Adjustments */
+         @media (max-width: 992px) {
+             .form-grid { grid-template-columns: 1fr 1fr; } /* 2 columns on medium screens */
+             .form-group.full-width { grid-column: 1 / -1; }
+         }
+         @media (max-width: 768px) {
+             /* Sidebar adjustments */
+              .sidebar { width: 100%; height: auto; position: static; border-right: none; border-bottom: 1px solid var(--border-color); flex-direction: row; overflow-x: auto; padding: 10px 15px; box-shadow: none; }
+             .sidebar h2, .sidebar .business-info { display: none; }
+             .sidebar ul { display: flex; flex-direction: row; flex-grow: 0; flex-wrap: nowrap; }
+             .sidebar ul li a { padding: 8px 10px; margin-bottom: 0; margin-right: 5px; }
+             .sidebar ul li a span { display: none; }
+             .sidebar ul li a i { font-size: 1.3em; margin: 0; color: var(--text-muted-color); }
+             .sidebar ul li a.active i { color: var(--primary-color); }
+             .sidebar ul li a.active { background-color: transparent; }
+             .sidebar .logout-link { margin-top: 0; padding-top: 0; border-top: none; margin-left: auto; }
+             .sidebar .logout-link a { padding: 8px 10px; }
+
+             /* Content adjustments */
+             .content { margin-left: 0; padding: 20px 15px; }
+             .content header h1 { font-size: 1.6em; }
+             .expense-form { padding: 20px; }
+             .form-grid { grid-template-columns: 1fr; } /* Stack form fields */
+             .form-group.full-width { grid-column: auto; } /* Reset span */
+             .filters { flex-direction: column; align-items: stretch; gap: 10px; padding: 10px; }
+             .table-container { overflow-x: auto; }
+             .theme-toggle { top: 10px; right: 10px; width: 35px; height: 35px; font-size: 1.1em; }
+         }
+    </style>
+</head>
+<body class=""> <!-- Theme class added by JS -->
+
+     <!-- Theme toggle button -->
+    <button id="theme-toggle-button" class="theme-toggle" title="Cambiar Tema">
+        <i class="fas fa-sun"></i> <!-- Default to light icon -->
+    </button>
+
+     <nav class="sidebar">
+        <h2>Gestiona Fácil</h2>
+        <div class="business-info">
+            <small id="business-name-sidebar">Cargando...</small>
+         </div>
+        <ul>
+            <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+            <li><a href="nueva_venta.html"><i class="fas fa-cash-register"></i> <span>Nueva Venta</span></a></li>
+            <li><a href="restaurante.html" id="restaurant-link" class="hidden"><i class="fas fa-utensils"></i> <span>Restaurante</span></a></li>
+            <li><a href="caja.html"><i class="fas fa-cash-register"></i> <span>Caja</span></a></li>
+            <li><a href="productos.html"><i class="fas fa-box-open"></i> <span>Productos</span></a></li>
+            <li><a href="inventario.html"><i class="fas fa-clipboard-list"></i> <span>Inventario</span></a></li>
+            <li><a href="proveedores.html"><i class="fas fa-truck"></i> <span>Proveedores</span></a></li>
+            <li><a href="clientes.html"><i class="fas fa-users"></i> <span>Clientes</span></a></li>
+            <li><a href="gastos.html" class="active"><i class="fas fa-file-invoice-dollar"></i> <span>Gastos</span></a></li>
+            <li><a href="reportes.html"><i class="fas fa-chart-line"></i> <span>Reportes</span></a></li>
+            <li><a href="configuracion.html"><i class="fas fa-cog"></i> <span>Configuración</span></a></li>
+        </ul>
+         <div class="logout-link">
+             <li><a href="login.html" id="logout-button"><i class="fas fa-sign-out-alt"></i> <span>Salir</span></a></li>
+         </div>
+    </nav>
+
+    <main class="content">
+        <header>
+            <h1>Registro de Gastos y Pagos</h1>
+            <p>Anota aquí todas las salidas de dinero de tu negocio.</p>
+        </header>
+
+        <section class="expense-form">
+            <h2><i class="fas fa-plus-circle" style="color: var(--primary-color);"></i> Registrar Nuevo Gasto/Pago</h2>
+            <form id="expense-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="expense-date">Fecha:</label>
+                         <div class="input-group">
+                            <input type="date" id="expense-date" required>
+                            <!-- Date input type usually doesn't need icon -->
+                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="expense-amount">Monto:</label>
+                        <div class="input-with-suffix">
+                            <input type="number" id="expense-amount" step="0.01" min="0.01" required placeholder="0.00">
+                             <span class="currency-symbol">$</span>
+                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="expense-type">Tipo:</label>
+                        <select id="expense-type" required>
+                            <option value="Gasto General">Gasto General</option>
+                            <option value="Pago Proveedor">Pago a Proveedor</option>
+                            <option value="Pago Empleado">Pago a Empleado</option>
+                            <option value="Retiro Socio">Retiro Socio/Dueño</option>
+                            <option value="Compra Activo">Compra Activo Fijo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="expense-beneficiary">Beneficiario/Descripción:</label>
+                        <div class="input-group">
+                            <input type="text" id="expense-beneficiary" list="beneficiary-list" required placeholder="Ej: Proveedor XYZ, Alquiler...">
+                             <i class="fas fa-user-tag"></i>
+                        </div>
+                        <datalist id="beneficiary-list">
+                            <!-- Options loaded by JS -->
+                        </datalist>
+                    </div>
+                    <div class="form-group">
+                        <label for="expense-category">Categoría:</label>
+                        <select id="expense-category" required>
+                            <option value="">-- Selecciona --</option>
+                            <option value="Compra Mercancía">Compra Mercancía</option>
+                            <option value="Sueldos y Salarios">Sueldos y Salarios</option>
+                            <option value="Alquiler">Alquiler</option>
+                            <option value="Servicios Públicos">Servicios Públicos (Luz, Agua, etc.)</option>
+                            <option value="Marketing y Publicidad">Marketing y Publicidad</option>
+                            <option value="Transporte">Transporte</option>
+                            <option value="Mantenimiento y Reparaciones">Mantenimiento y Reparaciones</option>
+                             <option value="Material Oficina">Material de Oficina</option>
+                             <option value="Comisiones Bancarias">Comisiones Bancarias</option>
+                             <option value="Impuestos">Impuestos</option>
+                             <option value="Intereses Préstamos">Intereses Préstamos</option>
+                             <option value="Retiros">Retiros (Socios/Dueño)</option>
+                             <option value="Activos Fijos">Compra Activos Fijos</option>
+                            <option value="Otros Gastos">Otros Gastos</option>
+                        </select>
+                    </div>
+                     <div class="form-group">
+                        <label for="expense-payment-method">Método de Pago:</label>
+                        <select id="expense-payment-method" required>
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Transferencia">Transferencia Bancaria</option>
+                             <option value="Tarjeta Débito/Crédito">Tarjeta Negocio</option>
+                             <option value="Cheque">Cheque</option>
+                             <!-- Banks loaded by JS -->
+                        </select>
+                        <!-- Optional field for bank reference -->
+                        <input type="text" id="expense-bank-ref" class="hidden" placeholder="Ref./Banco Origen (Opcional)" style="margin-top: 8px; font-size: 0.9em;">
+                    </div>
+                    <div class="form-group full-width" style="grid-column: 1 / -1;"> <!-- Span all columns -->
+                        <label for="expense-notes">Notas (Opcional):</label>
+                        <textarea id="expense-notes" rows="2"></textarea>
+                    </div>
+                </div>
+                 <p id="expense-form-error" class="error hidden"><i class="fas fa-exclamation-circle"></i> <span></span></p>
+                <div class="form-actions">
+                    <button type="submit"><i class="fas fa-save"></i> Guardar Gasto</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="expense-history">
+            <h2><i class="fas fa-history" style="color: var(--secondary-color);"></i> Historial de Gastos</h2>
+            <div class="filters">
+                 <label for="filter-start-date">Desde:</label>
+                 <input type="date" id="filter-start-date">
+                 <label for="filter-end-date">Hasta:</label>
+                 <input type="date" id="filter-end-date">
+                 <label for="filter-category">Categoría:</label>
+                 <select id="filter-category">
+                     <option value="">Todas</option>
+                     <!-- Categories loaded by JS -->
+                 </select>
+                 <button id="filter-button" class="filter-button"><i class="fas fa-filter"></i> Filtrar</button>
+                 <button id="reset-filter-button" type="button" class="reset-button"><i class="fas fa-undo"></i> Limpiar</button>
+                  <!-- Botón Descargar (Añadido) -->
+                 <button id="download-expenses-csv" class="reset-button" style="background-color: var(--info-color); margin-left: auto;">
+                     <i class="fas fa-download"></i> Descargar Filtrados (CSV)
+                 </button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Monto</th>
+                            <th>Tipo</th>
+                            <th>Beneficiario/Desc.</th>
+                            <th>Categoría</th>
+                            <th>Método Pago</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expense-table-body">
+                        <!-- Rows loaded by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <p id="no-expenses-message" class="hidden">No hay gastos registrados que coincidan con los filtros.</p>
+             <p class="total-expenses">Total Gastos Filtrados: <span id="total-filtered-expenses">0.00</span></p>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Theme Management ---
+            const themeToggleButton = document.getElementById('theme-toggle-button');
+            const body = document.body;
+            const themeIcon = themeToggleButton.querySelector('i');
+            function setTheme(theme) { if (theme === 'dark') { body.classList.add('dark-theme'); themeIcon.classList.remove('fa-sun'); themeIcon.classList.add('fa-moon'); localStorage.setItem('theme', 'dark'); } else { body.classList.remove('dark-theme'); themeIcon.classList.remove('fa-moon'); themeIcon.classList.add('fa-sun'); localStorage.setItem('theme', 'light'); } }
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+            themeToggleButton.addEventListener('click', () => { const currentTheme = localStorage.getItem('theme') || 'light'; setTheme(currentTheme === 'light' ? 'dark' : 'light'); });
+
+            // --- Business Info & Currency & Restaurant Link ---
+             let currency = '$';
+            try {
+                const businessName = localStorage.getItem('businessName') || 'Mi Negocio';
+                document.getElementById('business-name-sidebar').textContent = businessName;
+                 currency = localStorage.getItem('currency') || '$';
+                 document.querySelectorAll('.currency-symbol').forEach(el => el.textContent = currency);
+                 const isRestaurant = localStorage.getItem('businessType') === 'restaurant';
+                 document.getElementById('restaurant-link').classList.toggle('hidden', !isRestaurant);
+            } catch(e) { console.error("Error loading config", e); }
+
+            // --- Elementos UI Gastos ---
+            const expenseForm = document.getElementById('expense-form');
+            const expenseDateInput = document.getElementById('expense-date');
+            const expenseAmountInput = document.getElementById('expense-amount');
+            const expenseTypeSelect = document.getElementById('expense-type');
+            const expenseBeneficiaryInput = document.getElementById('expense-beneficiary');
+            const beneficiaryDatalist = document.getElementById('beneficiary-list');
+            const expenseCategorySelect = document.getElementById('expense-category');
+            const expensePaymentMethodSelect = document.getElementById('expense-payment-method');
+            const expenseBankRefInput = document.getElementById('expense-bank-ref');
+            const expenseNotesInput = document.getElementById('expense-notes');
+            const expenseFormError = document.getElementById('expense-form-error');
+             const expenseFormErrorSpan = expenseFormError.querySelector('span');
+            const expenseTableBody = document.getElementById('expense-table-body');
+            const noExpensesMessage = document.getElementById('no-expenses-message');
+            const filterStartDate = document.getElementById('filter-start-date');
+            const filterEndDate = document.getElementById('filter-end-date');
+            const filterCategory = document.getElementById('filter-category');
+            const filterButton = document.getElementById('filter-button');
+            const resetFilterButton = document.getElementById('reset-filter-button');
+            const totalFilteredExpensesEl = document.getElementById('total-filtered-expenses');
+            const downloadExpensesButton = document.getElementById('download-expenses-csv'); // Download button
+
+            let allExpenses = [];
+            let allProviders = [];
+            let allBanks = []; // Own bank accounts from config
+            let displayedExpenses = []; // To keep track of what's currently shown for download
+
+            // --- Carga Inicial ---
+            setDefaultDate();
+            loadAuxiliaryData(); // Cargar proveedores, bancos, etc.
+            loadExpenses(); // Cargar gastos existentes
+            populateCategoryFilter(); // Llenar filtro de categorías
+
+            // --- Event Listeners ---
+            expenseForm.addEventListener('submit', handleExpenseFormSubmit);
+
+            expenseTypeSelect.addEventListener('change', updateBeneficiaryInput);
+            expensePaymentMethodSelect.addEventListener('change', toggleBankRefInput);
+
+            filterButton.addEventListener('click', renderExpenseTable);
+            resetFilterButton.addEventListener('click', () => {
+                 filterStartDate.value = '';
+                 filterEndDate.value = '';
+                 filterCategory.value = '';
+                 renderExpenseTable(); // Re-render without filters
+            });
+
+            expenseTableBody.addEventListener('click', (event) => {
+                 const target = event.target.closest('button');
+                 if (target?.classList.contains('delete-expense-btn')) {
+                     const expenseId = target.dataset.id;
+                     deleteExpense(expenseId);
+                 }
+            });
+
+             downloadExpensesButton.addEventListener('click', downloadExpensesCSV);
+
+
+            // --- Funciones ---
+            function setDefaultDate() {
+                const today = new Date().toISOString().split('T')[0];
+                expenseDateInput.value = today;
+            }
+
+             function displayError(message) {
+                 expenseFormErrorSpan.textContent = message;
+                 expenseFormError.classList.remove('hidden');
+             }
+             function hideError() {
+                 expenseFormError.classList.add('hidden');
+             }
+
+
+            function loadAuxiliaryData() {
+                 try {
+                    allProviders = JSON.parse(localStorage.getItem('proveedores') || '[]');
+                    allBanks = JSON.parse(localStorage.getItem('config_banks') || '[]');
+                     // Sort providers for datalist
+                     allProviders.sort((a,b) => a.nombre.localeCompare(b.nombre));
+                     // Populate payment method dropdown with own banks
+                     allBanks.forEach(bank => {
+                         const option = document.createElement('option');
+                         // Use a prefix to distinguish from standard methods
+                         option.value = `banco_${bank.id}`;
+                         option.textContent = `Banco: ${bank.name} (${bank.info.substring(0,15)}...)`;
+                         expensePaymentMethodSelect.appendChild(option);
+                     });
+                } catch (error) {
+                    console.error("Error cargando datos auxiliares:", error);
+                }
+                 updateBeneficiaryInput(); // Update datalist initially
+            }
+
+             function loadExpenses() {
+                try {
+                    allExpenses = JSON.parse(localStorage.getItem('gastos') || '[]');
+                    renderExpenseTable(); // Render initial table (unfiltered)
+                } catch (error) {
+                    console.error("Error cargando gastos:", error);
+                    allExpenses = [];
+                    renderExpenseTable();
+                     noExpensesMessage.textContent = "Error al cargar los gastos.";
+                     noExpensesMessage.classList.remove('hidden');
+                }
+            }
+
+            function populateCategoryFilter() {
+                 const defaultCategories = Array.from(expenseCategorySelect.options)
+                                               .map(opt => opt.value)
+                                               .filter(val => val); // Exclude empty default option
+                 const expenseCategories = allExpenses.map(exp => exp.categoria);
+                 const uniqueCategories = [...new Set([...defaultCategories, ...expenseCategories])]
+                                             .filter(cat => cat) // Exclude empty/null categories
+                                             .sort((a, b) => a.localeCompare(b));
+
+                 // Preserve the "Todas" option
+                 const firstOption = filterCategory.options[0];
+                 filterCategory.innerHTML = ''; // Clear existing options (except 'Todas')
+                 filterCategory.appendChild(firstOption);
+
+
+                 uniqueCategories.forEach(cat => {
+                     const option = document.createElement('option');
+                     option.value = cat;
+                     option.textContent = cat;
+                     filterCategory.appendChild(option);
+                 });
+             }
+
+
+            function updateBeneficiaryInput() {
+                const type = expenseTypeSelect.value;
+                beneficiaryDatalist.innerHTML = ''; // Clear previous options
+
+                if (type === 'Pago Proveedor') {
+                    expenseBeneficiaryInput.placeholder = "Selecciona o escribe proveedor";
+                    expenseBeneficiaryInput.required = true; // Make required for specific types
+                    allProviders.forEach(p => {
+                        const option = document.createElement('option');
+                        option.value = p.nombre; // Use name for datalist value
+                         option.dataset.providerId = p.id; // Store ID if needed later
+                        beneficiaryDatalist.appendChild(option);
+                    });
+                } else if (type === 'Pago Empleado') {
+                     expenseBeneficiaryInput.placeholder = "Nombre del empleado";
+                      expenseBeneficiaryInput.required = true;
+                    // Load employees if available
+                } else if (type === 'Retiro Socio') {
+                     expenseBeneficiaryInput.placeholder = "Nombre del socio/dueño";
+                      expenseBeneficiaryInput.required = true;
+                 } else { // Gasto General, Compra Activo, etc.
+                     expenseBeneficiaryInput.placeholder = "Ej: Alquiler Local, Compra Papelería";
+                      expenseBeneficiaryInput.required = true; // Keep it generally required
+                }
+            }
+
+             function toggleBankRefInput() {
+                 const selectedMethod = expensePaymentMethodSelect.value;
+                 // Show ref input if it's 'Transferencia' or one of the custom bank options
+                 const showRef = selectedMethod === 'Transferencia' || selectedMethod.startsWith('banco_');
+                 expenseBankRefInput.classList.toggle('hidden', !showRef);
+                 if (!showRef) {
+                     expenseBankRefInput.value = ''; // Clear if hidden
+                 }
+             }
+
+            function handleExpenseFormSubmit(event) {
+                event.preventDefault();
+                hideError();
+
+                const paymentMethodValue = expensePaymentMethodSelect.value;
+                let paymentMethodText = expensePaymentMethodSelect.options[expensePaymentMethodSelect.selectedIndex].text;
+                 // If it's a custom bank, maybe store just the bank name/info for clarity?
+                 if (paymentMethodValue.startsWith('banco_')) {
+                     // paymentMethodText might already be good enough ("Banco: X (info...)")
+                 }
+
+
+                const expenseData = {
+                    id: `g_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+                    fecha: expenseDateInput.value,
+                    monto: parseFloat(expenseAmountInput.value),
+                    tipo: expenseTypeSelect.value,
+                    beneficiario: expenseBeneficiaryInput.value.trim(),
+                    categoria: expenseCategorySelect.value,
+                    metodoPago: paymentMethodText, // Store the display text or a structured value
+                    metodoPagoId: paymentMethodValue, // Store the original value (e.g., 'banco_123')
+                    referenciaBanco: (paymentMethodValue === 'Transferencia' || paymentMethodValue.startsWith('banco_'))
+                                        ? expenseBankRefInput.value.trim() : null,
+                    notas: expenseNotesInput.value.trim() || null,
+                };
+
+                // --- Validaciones ---
+                if (!expenseData.fecha) { displayError('La Fecha es obligatoria.'); expenseDateInput.focus(); return; }
+                if (isNaN(expenseData.monto) || expenseData.monto <= 0) { displayError('El Monto debe ser un número positivo.'); expenseAmountInput.focus(); return; }
+                if (!expenseData.tipo) { displayError('Selecciona un Tipo de gasto.'); expenseTypeSelect.focus(); return; }
+                if (!expenseData.beneficiario) { displayError('El Beneficiario/Descripción es obligatorio.'); expenseBeneficiaryInput.focus(); return; }
+                if (!expenseData.categoria) { displayError('Selecciona una Categoría.'); expenseCategorySelect.focus(); return; }
+                if (!expenseData.metodoPagoId) { displayError('Selecciona un Método de Pago.'); expensePaymentMethodSelect.focus(); return; }
+                 // Potentially add validation based on type, e.g., require provider selection if type is 'Pago Proveedor'
+
+
+                saveExpense(expenseData);
+                expenseForm.reset();
+                setDefaultDate(); // Reset date to today
+                updateBeneficiaryInput(); // Reset beneficiary placeholder/datalist
+                toggleBankRefInput(); // Reset bank ref visibility
+                loadExpenses(); // Reload and render table
+                populateCategoryFilter(); // Update category filter if needed
+            }
+
+            function saveExpense(expenseData) {
+                try {
+                    allExpenses.push(expenseData);
+                    localStorage.setItem('gastos', JSON.stringify(allExpenses));
+                    console.log("Gasto guardado:", expenseData);
+                } catch (error) {
+                    console.error("Error guardando gasto:", error);
+                    displayError("Hubo un error al guardar el gasto.");
+                     // Remove the item we tried to push if save failed
+                    allExpenses.pop();
+                }
+            }
+
+            function renderExpenseTable() {
+                expenseTableBody.innerHTML = '';
+                const startDate = filterStartDate.value;
+                const endDate = filterEndDate.value;
+                const category = filterCategory.value;
+                let totalFiltered = 0;
+
+                 const sortedExpenses = [...allExpenses].sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+
+                displayedExpenses = sortedExpenses.filter(exp => { // Store filtered list for download
+                    const expenseDate = exp.fecha; // Dates are stored as YYYY-MM-DD
+                    if (startDate && expenseDate < startDate) return false;
+                    if (endDate && expenseDate > endDate) return false;
+                    if (category && exp.categoria !== category) return false;
+                    return true;
+                });
+
+                 noExpensesMessage.classList.toggle('hidden', displayedExpenses.length > 0);
+                  downloadExpensesButton.disabled = displayedExpenses.length === 0; // Disable download if empty
+
+                if (displayedExpenses.length > 0) {
+                    displayedExpenses.forEach(exp => {
+                        const row = expenseTableBody.insertRow();
+                         // Format date nicely for display
+                        const displayDate = new Date(exp.fecha + 'T00:00:00').toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit'});
+
+                        row.innerHTML = `
+                            <td>${displayDate}</td>
+                            <td>${currency}${exp.monto.toFixed(2)}</td>
+                            <td>${exp.tipo}</td>
+                            <td>${exp.beneficiario}</td>
+                            <td>${exp.categoria}</td>
+                            <td>${exp.metodoPago}${exp.referenciaBanco ? ` (${exp.referenciaBanco})` : ''}</td>
+                            <td class="actions">
+                                <button class="delete-expense-btn" data-id="${exp.id}" title="Eliminar Gasto"><i class="fas fa-trash-alt"></i></button>
+                            </td>
+                        `;
+                         totalFiltered += exp.monto;
+                    });
+                }
+                 totalFilteredExpensesEl.textContent = currency + totalFiltered.toFixed(2);
+            }
+
+             function deleteExpense(expenseId) {
+                 const expenseIndex = allExpenses.findIndex(e => e.id == expenseId);
+                 if (expenseIndex > -1) {
+                      const expense = allExpenses[expenseIndex];
+                     if (confirm(`¿Estás seguro de que quieres eliminar el gasto de ${currency}${expense.monto.toFixed(2)} para "${expense.beneficiario}" del ${new Date(expense.fecha + 'T00:00:00').toLocaleDateString()}?`)) {
+                        try {
+                            allExpenses.splice(expenseIndex, 1); // Remove from array
+                            localStorage.setItem('gastos', JSON.stringify(allExpenses));
+                            console.log("Gasto eliminado:", expenseId);
+                            renderExpenseTable(); // Update the table display
+                            populateCategoryFilter(); // Update filter options
+                        } catch (error) {
+                             console.error("Error eliminando gasto:", error);
+                             alert("Hubo un error al eliminar el gasto.");
+                             // Optional: Re-add if save failed?
+                        }
+                     }
+                 } else {
+                      console.error("Gasto no encontrado para eliminar:", expenseId);
+                 }
+             }
+
+             // --- Download CSV Function ---
+             function downloadExpensesCSV() {
+                 if (displayedExpenses.length === 0) {
+                     alert("No hay gastos filtrados para descargar.");
+                     return;
+                 }
+                 console.log("Preparando descarga CSV de gastos filtrados...");
+                 const headers = ["ID", "Fecha", "Monto", "Tipo", "Beneficiario/Desc.", "Categoria", "Metodo Pago", "Referencia/Banco", "Notas"];
+
+                 const rows = displayedExpenses.map(exp => [
+                     exp.id,
+                     exp.fecha,
+                     exp.monto.toFixed(2),
+                     exp.tipo || '',
+                     `"${(exp.beneficiario || '').replace(/"/g, '""')}"`,
+                     exp.categoria || '',
+                     exp.metodoPago || '',
+                     exp.referenciaBanco || '',
+                     `"${(exp.notas || '').replace(/"/g, '""')}"`
+                 ]);
+
+                 let csvContent = "data:text/csv;charset=utf-8,";
+                 csvContent += headers.join(',') + '\r\n';
+                 rows.forEach(rowArray => { csvContent += rowArray.join(',') + '\r\n'; });
+
+                 const encodedUri = encodeURI(csvContent);
+                 const link = document.createElement("a");
+                 link.setAttribute("href", encodedUri);
+                 const dateStr = new Date().toISOString().split('T')[0];
+                 // Add filter info to filename?
+                 const categoryFilterText = filterCategory.value ? `_cat-${filterCategory.value}` : '';
+                  const dateFilterText = filterStartDate.value ? `_desde-${filterStartDate.value}` : '';
+                 link.setAttribute("download", `gastos_export_${dateStr}${categoryFilterText}${dateFilterText}.csv`);
+                 document.body.appendChild(link);
+                 link.click();
+                 document.body.removeChild(link);
+                 console.log("Descarga iniciada.");
+             }
+
+            // --- Lógica botón Salir ---
+            document.getElementById('logout-button')?.addEventListener('click', (e) => {
+                e.preventDefault();
+                 let canLogout = true;
+                 try {
+                     const cashStatus = JSON.parse(localStorage.getItem('cashRegisterStatus') || '{}');
+                     if (cashStatus.isOpen) { alert("¡Atención! La caja está abierta. Debes cerrarla antes de salir."); canLogout = false; }
+                 } catch(err) { console.error("Error checking cash status on logout", err); }
+                 if (canLogout && confirm('¿Estás seguro de que quieres salir?')) { window.location.href = 'login.html'; }
+            });
+        });
+    </script>
+
+</body>
+</html>
